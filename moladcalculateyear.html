@@ -111,7 +111,8 @@ function getGregorianDateDatOfRoshHashanah(year){
 
 function showTable(year){
 	var t="<h1>שנת "+HeDate.gimatria(year)+"</h1>";
-	
+	t+="<p>"+year+" לבריאת העולם</p><p>"+(year-3449)+" לשטרות</p><p>"+
+(year-3829)+" לחורבן</p><p>"+((year-1)%7+1)+" לשמיטה</p>"
 
 	time = getTimeOfMoladRoshHshann(year);
     var days = new Array("", "ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת");
