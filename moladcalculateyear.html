@@ -131,7 +131,7 @@ function showTable(year){
 	
 	
 	t+= "<table border=1>";
-	t+= "<tr><td>חודש</td><td>זמן מולד<br/>(יום: שעות: חלקים)</td><td>יום בשבוע א בחודש</td><td>תאריך לועזי א בחודש</td><td>מספר ימים בחודש</td></tr>";
+	t+= "<tr><td>חודש</td><td>זמן מולד<br/>(יום: שעות: חלקים)</td><td>יום בשבוע א בחודש</td><td>מספר ימים בחודש</td><td>תאריך לועזי א בחודש</td></tr>";
 	for (var i=1;i<=13;i++){
 		if (i==6 && !IsLeapYear(year)) continue;
 		var d=new HeDate(year,i,1);
@@ -150,7 +150,7 @@ function showTable(year){
 	t+="<td>"+d.getMonthString()+"</td>";
 	time = getTimeOfMoladRoshHshann(year+1,1);
 	t+="<td>"+days[mod7(time.days)] + " : " + time.hours + " : " + time.parts+"</td>";
-	t+="<td>"+days[d.getDay()]+"</td>";
+	t+="<td>"+days[d.getDay()]+"</td><td></td>";
 	var gDate=d.ConvertToGregorian();
 	t+= "<td>" + gDate.getDate() + "/" + (gDate.getMonth() + 1) + "/" + gDate.getFullYear()+"</td>";
 	t+="</tr>";
