@@ -108,6 +108,9 @@ function getLine(year) {
     time = getTimeOfMoladRoshHshann(year);
     line.push(`<a href="moladcalculateyear.html#${year}">${HeDate.gimatria(year)}`);
     line.push(year);
+    line.push(year-3449);
+    line.push(year-3829);
+    line.push((year-1)%7+1);
     var leap = new Array("פשוטה", "מעוברת");
     line.push(year%19==0?19:year%19);
     line.push(leap[IsLeapYear(year) * 1]);
@@ -129,8 +132,11 @@ function buildTable(from, to) {
     let table = [];
     table.push([
         'שנה',
-		'בספרות',
-		'במחזור',
+	'בספרות',
+	'לשטרות',
+	'לחורבן',
+	'לשמיטה',
+	'במחזור',
         'מעוברת?',
         'זמן מולד\n(יום: שעות: חלקים)',
         'דחיות',
