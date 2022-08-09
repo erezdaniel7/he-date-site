@@ -120,13 +120,13 @@ function showTable(year){
 	var type = new Array("חסרה", "כסדרה", "שלמה");
 	var DayOfRoshHshan = getDayOfRoshHshan(year);
 	t+="<p>"+(year%19==0?19:year%19)+" במחזור</p>";
-	t+="<p>"+leap[IsLeapYear(year) * 1]</p>";
+	t+="<p>"+leap[IsLeapYear(year) * 1]+"</p>";
 	if (Delays!=""){
 		t+="<p>"+Delays+"</p>";
 	}
 	t+="<p> אורך השנה: "+(354+ getyeartype(year) + 30*IsLeapYear(year)) + " ימים</p>";
-	t+="<p>"+type[1 + getyeartype(year)]</p>";
-	t+="<p>"+String.fromCharCode(1487+mod7(DayOfRoshHshan))+type[1 + getyeartype(year)].substr(0,1)+String.fromCharCode(1487+mod7(DayOfRoshHshan+191+getyeartype(year)+IsLeapYear(year)*30))</p>";
+	t+="<p>"+type[1 + getyeartype(year)]+"</p>";
+	t+="<p>"+String.fromCharCode(1487+mod7(DayOfRoshHshan))+type[1 + getyeartype(year)].substr(0,1)+String.fromCharCode(1487+mod7(DayOfRoshHshan+191+getyeartype(year)+IsLeapYear(year)*30))+"</p>";
 
 	t+= "<table border=1>";
 	t+= "<tr><td>חודש</td><td>זמן מולד<br/>(יום: שעות: חלקים)</td><td>יום בשבוע א בחודש</td><td>מספר ימים בחודש</td><td>תאריך לועזי א בחודש</td></tr>";
