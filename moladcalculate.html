@@ -61,20 +61,19 @@ var Delays;
 function getDayOfRoshHshan(year) {
     Delays="";
     myTime=getTimeOfMoladRoshHshann(year);
-    if (myTime.hours >= 18) //מולד זקן בל תדרוש
-        { myTime.days++; Delays = "מולד זקן בל תדרוש"; }
+	if (mod7(myTime.days) == 1 | mod7(myTime.days) == 4 | mod7(myTime.days) == 6) //לא אד"ו ראש
+        { myTime.days++; Delays = "לא אד\"ו ראש"; }
+    else if (myTime.hours >= 18) //מולד זקן בל תדרוש
+	    {
+		    if (mod7(myTime.days) == 2)
+                { myTime.days++; Delays = "מולד זקן בל תדרוש"; }
+			else
+			    { myTime.days+=2; Delays = "מולד זקן בל תדרוש ולא אד\"ו ראש"; }
+		}
     else if (mod7(myTime.days) == 3 && ((myTime.hours == 9 && myTime.parts >= 204) | myTime.hours > 9) && !IsLeapYear(year)) // ג"ט ר"ד בשנה פשוטה גרוש
-        { myTime.days++; Delays = "ג\"ט ר\"ד בשנה פשוטה גרוש"; }
+        { myTime.days+=2; Delays = "ג\"ט ר\"ד בשנה פשוטה גרוש"; }
     else if (mod7(myTime.days) == 2 && ((myTime.hours == 15 && myTime.parts >= 589) | myTime.hours > 15) && IsLeapYear(year - 1)) // בט\"ו תקפ\"ט אחר עיבור עקור מלשרוש
         { myTime.days++; Delays = "בט\"ו תקפ\"ט אחר עיבור עקור מלשרוש"; }
-
-        if (mod7(myTime.days) == 1 | mod7(myTime.days) == 4 | mod7(myTime.days) == 6) //לא אד"ו ראש
-        {
-            myTime.days++;
-            if (Delays != "") Delays += "\n";
-            Delays += "לא אד\"ו ראש";
-
-        }
     return myTime.days;
 }
 
@@ -108,8 +107,13 @@ function getLine(year) {
     let line = [];
     time = getTimeOfMoladRoshHshann(year);
     line.push(`<a href="moladcalculateyear.html#${year}">${HeDate.gimatria(year)}`);
+    line.push(year);
+    line.push(year-3449);
+    line.push(year-3829);
+    line.push((year-1)%7+1);
     var leap = new Array("פשוטה", "מעוברת");
-    line.push(leap[IsLeapYear(year) * 1] + " ("+(year%19==0?19:year%19)+")");
+    line.push(year%19==0?19:year%19);
+    line.push(leap[IsLeapYear(year) * 1]);
     var days = new Array("", "ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת");
     line.push(`${days[mod7(time.days)]} : ${time.hours} : ${time.parts}`);
     var DayOfRoshHshan = getDayOfRoshHshan(year);
@@ -117,7 +121,8 @@ function getLine(year) {
     line.push(days[mod7(DayOfRoshHshan)]);
     line.push(354+getyeartype(year)+IsLeapYear(year)*30);
     var type = new Array("חסרה", "כסדרה", "שלמה");
-    line.push(type[1 + getyeartype(year)] + " ("+String.fromCharCode(1487+mod7(DayOfRoshHshan))+type[1 + getyeartype(year)].substr(0,1)+String.fromCharCode(1487+mod7(DayOfRoshHshan+191+getyeartype(year)+IsLeapYear(year)*30)) +")");
+    line.push(type[1 + getyeartype(year)]);
+    line.push(String.fromCharCode(1487+mod7(DayOfRoshHshan))+type[1 + getyeartype(year)].substr(0,1)+String.fromCharCode(1487+mod7(DayOfRoshHshan+191+getyeartype(year)+IsLeapYear(year)*30)));
     var gDate = getGregorianDateDatOfRoshHashanah(year);
     line.push(gDate.getDate() + "/" + (gDate.getMonth() + 1) + "/" + gDate.getFullYear());
     return line;
@@ -127,12 +132,18 @@ function buildTable(from, to) {
     let table = [];
     table.push([
         'שנה',
+	'בספרות',
+	'לשטרות',
+	'לחורבן',
+	'בשמיטה',
+	'במחזור',
         'מעוברת?',
         'זמן מולד\n(יום: שעות: חלקים)',
         'דחיות',
         'יום בשבוע ראש השנה',
         'מספר ימי השנה',
         'סוג שנה',
+		'סימן השנה',
         'תאריך לועזי של ראש השנה'
     ]);
     for (i=from; i<=to; i++){

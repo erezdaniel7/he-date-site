@@ -62,24 +62,23 @@ function mod7(day){
     return ans;
 }
 
-var Delays = [];
+var Delays = "";
 function getDayOfRoshHshan(year) {
-    Delays[year]="";
+    Delays="";
     myTime=getTimeOfMoladRoshHshann(year);
-    if (myTime.hours >= 18) //מולד זקן בל תדרוש
-        { myTime.days++; Delays[year] = "מולד זקן בל תדרוש"; }
+	if (mod7(myTime.days) == 1 | mod7(myTime.days) == 4 | mod7(myTime.days) == 6) //לא אד"ו ראש
+        { myTime.days++; Delays = "לא אד\"ו ראש"; }
+    else if (myTime.hours >= 18) //מולד זקן בל תדרוש
+	    {
+		    if (mod7(myTime.days) == 2)
+                { myTime.days++; Delays = "מולד זקן בל תדרוש"; }
+			else
+			    { myTime.days+=2; Delays = "מולד זקן בל תדרוש ולא אד\"ו ראש"; }
+		}
     else if (mod7(myTime.days) == 3 && ((myTime.hours == 9 && myTime.parts >= 204) | myTime.hours > 9) && !IsLeapYear(year)) // ג"ט ר"ד בשנה פשוטה גרוש
-        { myTime.days++; Delays[year] = "ג\"ט ר\"ד בשנה פשוטה גרוש"; }
+        { myTime.days+=2; Delays = "ג\"ט ר\"ד בשנה פשוטה גרוש"; }
     else if (mod7(myTime.days) == 2 && ((myTime.hours == 15 && myTime.parts >= 589) | myTime.hours > 15) && IsLeapYear(year - 1)) // בט\"ו תקפ\"ט אחר עיבור עקור מלשרוש
-        { myTime.days++; Delays[year] = "בט\"ו תקפ\"ט אחר עיבור עקור מלשרוש"; }
-
-        if (mod7(myTime.days) == 1 | mod7(myTime.days) == 4 | mod7(myTime.days) == 6) //לא אד"ו ראש
-        {
-            myTime.days++;
-            if (Delays[year] != "") Delays[year] += "<br/>";
-            Delays[year] += "לא אד\"ו ראש";
-
-        }
+        { myTime.days++; Delays = "בט\"ו תקפ\"ט אחר עיבור עקור מלשרוש"; }
     return myTime.days;
 }
 
@@ -111,7 +110,8 @@ function getGregorianDateDatOfRoshHashanah(year){
 
 function showTable(year){
 	var t="<h1>שנת "+HeDate.gimatria(year)+"</h1>";
-	
+	t+="<p>"+year+" לבריאת העולם</p><p>"+(year-3449)+" לשטרות</p><p>"+
+(year-3829)+" לחורבן</p><p>"+((year-1)%7+1)+" לשמיטה</p>"
 
 	time = getTimeOfMoladRoshHshann(year);
     var days = new Array("", "ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת");
@@ -119,18 +119,17 @@ function showTable(year){
 	var leap = new Array("פשוטה", "מעוברת");
 	var type = new Array("חסרה", "כסדרה", "שלמה");
 	var DayOfRoshHshan = getDayOfRoshHshan(year);
-	t+="<ul>";
-	t+="<li>"+type[1 + getyeartype(year)]+", " + leap[IsLeapYear(year) * 1] +  " ("+String.fromCharCode(1487+mod7(DayOfRoshHshan))+type[1 + getyeartype(year)].substr(0,1)+String.fromCharCode(1487+mod7(DayOfRoshHshan+191+getyeartype(year)+IsLeapYear(year)*30)) +")</li>";
-	t+="<li>שנה "+(year%19==0?19:year%19)+" במחזור</li>";
-	if (Delays[year]!=""){
-		t+="<li>"+Delays[year]+"</li>";
+	t+="<p>"+(year%19==0?19:year%19)+" במחזור</p>";
+	t+="<p>"+leap[IsLeapYear(year) * 1]+"</p>";
+	if (Delays!=""){
+		t+="<p>"+Delays+"</p>";
 	}
-	t+="<li> אורך השנה: "+(354+ getyeartype(year) + 30*IsLeapYear(year)) + " ימים</li>";
-	t+="</ul>";
-	
-	
+	t+="<p> אורך השנה: "+(354+ getyeartype(year) + 30*IsLeapYear(year)) + " ימים</p>";
+	t+="<p>"+type[1 + getyeartype(year)]+"</p>";
+	t+="<p>"+String.fromCharCode(1487+mod7(DayOfRoshHshan))+type[1 + getyeartype(year)].substr(0,1)+String.fromCharCode(1487+mod7(DayOfRoshHshan+191+getyeartype(year)+IsLeapYear(year)*30))+"</p>";
+
 	t+= "<table border=1>";
-	t+= "<tr><td>חודש</td><td>זמן מולד<br/>(יום: שעות: חלקים)</td><td>יום בשבוע א בחודש</td><td>תאריך לועזי א בחודש</td></tr>";
+	t+= "<tr><td>חודש</td><td>זמן מולד<br/>(יום: שעות: חלקים)</td><td>יום בשבוע א בחודש</td><td>מספר ימים בחודש</td><td>תאריך לועזי א בחודש</td></tr>";
 	for (var i=1;i<=13;i++){
 		if (i==6 && !IsLeapYear(year)) continue;
 		var d=new HeDate(year,i,1);
@@ -139,11 +138,21 @@ function showTable(year){
 		time = getTimeOfMoladRoshHshann(year,i);
 		t+="<td>"+days[mod7(time.days)] + " : " + time.hours + " : " + time.parts+"</td>";
 		t+="<td>"+days[d.getDay()]+"</td>";
+		t+="<td>"+d.getMonthLength()+"</td>"
 		var gDate=d.ConvertToGregorian();
 		t+= "<td>" + gDate.getDate() + "/" + (gDate.getMonth() + 1) + "/" + gDate.getFullYear()+"</td>";
-		
 		t+="</tr>";
 	}
+	var d=new HeDate(year+1,1,1);
+	t+="<tr>";
+	t+="<td>"+d.getMonthString()+"</td>";
+	time = getTimeOfMoladRoshHshann(year+1,1);
+	t+="<td>"+days[mod7(time.days)] + " : " + time.hours + " : " + time.parts+"</td>";
+	t+="<td>"+days[d.getDay()]+"</td><td></td>";
+	var gDate=d.ConvertToGregorian();
+	t+= "<td>" + gDate.getDate() + "/" + (gDate.getMonth() + 1) + "/" + gDate.getFullYear()+"</td>";
+	t+="</tr>";
+
 	t+= "</table>"
     document.getElementById("myTable").innerHTML=t;
 }
