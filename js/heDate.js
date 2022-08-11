@@ -281,9 +281,10 @@ HeDate.gimatria = function (num){
 	else if (ans.length==1)
 		ans =ans + "'";
 
-	if (num>1000 && num<=9999) //אלפים
-		ans = abc.charAt((num-num%1000)/1000) + "'" + ans;
-	if (num%1000 == 0) ans = abc.charAt((num/1000) + "' אלפים";
+	if (num>=1000 && num<=9999) //אלפים
+	    {if (num%1000 == 0)
+                ans = abc.charAt((num/1000) + "' אלפים";
+            else ans = abc.charAt((num-num%1000)/1000) + "'" + ans;}
 	return ans
 }
 
