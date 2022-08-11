@@ -292,7 +292,7 @@ HeDate.regimatria = function (str){
 	var temp=str;
 	var abc=" אבגדהוזחטיכלמנסעפצקרשת";
 	var index;
-	if (temp.includes("אלפים")) return abc.indexOf(str.charAt(0))
+	if (temp.includes("אלפים")) return abc.indexOf(str.charAt(0)) * 1000
 	while (temp.length>>0){
 		index=abc.indexOf(temp.charAt(0));
 		if (index>0){
