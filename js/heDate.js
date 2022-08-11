@@ -283,7 +283,7 @@ HeDate.gimatria = function (num){
 
 	if (num>=1000 && num<=9999) //אלפים
 		ans = abc.charAt((num-num%1000)/1000) + "'" + ans;
-
+	if (num%1000 == 0) ans = abc.charAt((num-num%1000)/1000) + "' אלפים"
 	return ans
 }
 
@@ -292,6 +292,7 @@ HeDate.regimatria = function (str){
 	var temp=str;
 	var abc=" אבגדהוזחטיכלמנסעפצקרשת";
 	var index;
+	if (temp.includes("אלפים")) return abc.indexOf(str.charAt(0))
 	while (temp.length>>0){
 		index=abc.indexOf(temp.charAt(0));
 		if (index>0){
