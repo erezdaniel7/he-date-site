@@ -123,20 +123,21 @@ function odateChange() {
 
 var days = ['יום ראשון','יום שני','יום שלישי','יום רביעי','יום חמישי','יום שישי','שבת'];
 function convertToOver(){
-	oDate=(new HeDate(parseInt(HeDate.regimatria($("#SelectYear").val())),parseInt($("#SelectMonth").val()),parseInt($("#SelectDate").val()))).ConvertToGregorian();
+	const oDate=(new HeDate(parseInt(HeDate.regimatria($("#SelectYear").val())),parseInt($("#SelectMonth").val()),parseInt($("#SelectDate").val()))).ConvertToGregorian();
 	$("#SelectOYear").val(oDate.getFullYear());
 	$("#SelectOMonth").val(oDate.getMonth()+1);
-    initializSelectODate();
-    $("#SelectODate").val(oDate.getDate());
+	initializSelectODate();
+	$("#SelectODate").val(oDate.getDate());
 	$(".showDay").html(days[oDate.getDay()]);
 }
 function convertToHe(){
-	mydate=new HeDate(new Date($("#SelectOYear").val(),$("#SelectOMonth").val()-1,$("#SelectODate").val()));
-    $("#SelectYear").val(HeDate.gimatria(mydate.getYear()));
-    initializSelectMonth();
-    $("#SelectMonth").val(mydate.getMonth());
-    initializSelectDate();
-    $("#SelectDate").val(mydate.getDate());
+	const oDate = new Date($("#SelectOYear").val(),$("#SelectOMonth").val()-1,$("#SelectODate").val());
+	const mydate = new HeDate(oDate);
+	$("#SelectYear").val(HeDate.gimatria(mydate.getYear()));
+	initializSelectMonth();
+	$("#SelectMonth").val(mydate.getMonth());
+	initializSelectDate();
+	$("#SelectDate").val(mydate.getDate());
 	$(".showDay").html(days[oDate.getDay()]);
 }
 
